@@ -189,7 +189,7 @@ gui.make_map_gen_settings = function(parent)
 
     -- presets
     local presets = {}
-    for name, preset in pairs(game.map_gen_presets) do
+    for name, preset in pairs(prototypes.map_gen_preset) do
       if not preset.basic_settings then
         goto continue
       end

@@ -87,7 +87,7 @@ end
 -- returns table = {["intended-property"] = {{name = "expression-name", order = "order"}, ...}}
 util.get_relevant_noise_expressions = function()
   local expressions = {}
-  for name, named_noise_expression in pairs(game.named_noise_expressions) do
+  for name, named_noise_expression in pairs(prototypes.named_noise_expression) do
     local intended_property = named_noise_expression.intended_property
     if intended_property ~= "" then
       expressions[intended_property] = expressions[intended_property] or {}
@@ -105,7 +105,7 @@ end
 
 util.get_possible_noise_expression_properties = function()
   local properties = {}
-  for _, named_noise_expression in pairs(game.named_noise_expressions) do
+  for _, named_noise_expression in pairs(prototypes.named_noise_expression) do
     local intended_property = named_noise_expression.intended_property
     if intended_property ~= "" then
       properties[intended_property] = true

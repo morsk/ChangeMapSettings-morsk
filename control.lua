@@ -199,7 +199,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
   -- then set up the preset
   -- {"map-gen-preset-name." .. preset_name}
   local preset_name = item[1]:sub(string.len("map-gen-preset-name.") + 1)
-  local preset = game.map_gen_presets[preset_name]
+  local preset = prototypes.map_gen_preset[preset_name]
 
   map_gen_gui.set_to_current(gui.get_map_gen_settings_container(player), preset.basic_settings)
 end)
