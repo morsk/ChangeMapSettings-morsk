@@ -41,7 +41,7 @@ map_settings_gui.make_pollution_settings = function(parent, map_settings)
   map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "diffusion", {"gui." .. MOD_PREFIX .. "in-unit", {"gui-map-generator.pollution-diffusion-ratio"}, {"gui." .. MOD_PREFIX .. "percent"}}, {"gui-map-generator.pollution-diffusion-ratio-description"}, tostring(map_settings.pollution.diffusion_ratio * 100), 50)
 end
 
-map_settings_gui.make_evolution_settings = function(parent, map_settings)
+map_settings_gui.make_evolution_settings = function(parent, map_settings, surface)
   local WIDGET_PREFIX = "evolution-"
   local flow = parent.add{
     type = "flow",
@@ -71,7 +71,7 @@ map_settings_gui.make_evolution_settings = function(parent, map_settings)
     state = map_settings.enemy_evolution.enabled,
   }
   table.children[1].style.horizontally_stretchable = true
-  map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "factor", {"gui-map-generator.evolution"}, {"gui." .. MOD_PREFIX .. "evolution-factor-tooltip"}, util.number_to_string(game.forces["enemy"].evolution_factor), 80)
+  map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "factor", {"gui-map-generator.evolution"}, {"gui." .. MOD_PREFIX .. "evolution-factor-tooltip"}, util.number_to_string(game.forces["enemy"].get_evolution_factor(surface)), 80)
   map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "time", {"gui-map-generator.evolution-time-factor"}, {"gui-map-generator.evolution-time-factor-description"}, util.number_to_string(map_settings.enemy_evolution.time_factor * 100), 80)
   map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "destroy", {"gui-map-generator.evolution-destroy-factor"}, {"gui-map-generator.evolution-destroy-factor-description"}, util.number_to_string(map_settings.enemy_evolution.destroy_factor * 100), 80)
   map_settings_gui.make_config_option(table, WIDGET_PREFIX .. "pollution", {"gui-map-generator.evolution-pollution-factor"}, {"gui-map-generator.evolution-pollution-factor-description"}, util.number_to_string(map_settings.enemy_evolution.pollution_factor * 100), 80)
@@ -175,11 +175,11 @@ map_settings_gui.expansion_set_to_current = function(parent, map_settings)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "max-cd-textfield"].text = tostring(map_settings.enemy_expansion.max_expansion_cooldown / 3600)
 end
 
-map_settings_gui.evolution_set_to_current = function(parent, map_settings)
+map_settings_gui.evolution_set_to_current = function(parent, map_settings, surface)
   local WIDGET_PREFIX = "evolution-"
   local table = parent[ENTIRE_PREFIX .. WIDGET_PREFIX .. "flow"][ENTIRE_PREFIX .. WIDGET_PREFIX .. "table"]
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "checkbox"].state = map_settings.enemy_evolution.enabled
-  table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "factor-textfield"].text = util.number_to_string(game.forces["enemy"].evolution_factor)
+  table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "factor-textfield"].text = util.number_to_string(game.forces["enemy"].get_evolution_factor(surface))
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "time-textfield"].text = util.number_to_string(map_settings.enemy_evolution.time_factor * 100)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "destroy-textfield"].text = util.number_to_string(map_settings.enemy_evolution.destroy_factor * 100)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "pollution-textfield"].text = util.number_to_string(map_settings.enemy_evolution.pollution_factor * 100)

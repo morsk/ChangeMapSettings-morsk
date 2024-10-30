@@ -108,7 +108,7 @@ gui.make_map_settings = function(parent, surface)
   --make different map gen option groups
   map_settings_gui.make_pollution_settings(config_table, map_settings)
   map_settings_gui.make_expansion_settings(config_table, map_settings)
-  map_settings_gui.make_evolution_settings(config_table, map_settings)
+  map_settings_gui.make_evolution_settings(config_table, map_settings, surface)
   gui.make_general_map_settings(config_table, surface)
 end
 

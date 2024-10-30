@@ -46,7 +46,7 @@ local function set_to_current_map_settings(player)
   local config_table = gui.get_map_settings_container(player)
   local map_settings = game.map_settings
   map_settings_gui.expansion_set_to_current(config_table, map_settings)
-  map_settings_gui.evolution_set_to_current(config_table, map_settings)
+  map_settings_gui.evolution_set_to_current(config_table, map_settings, player.surface)
   map_settings_gui.pollution_set_to_current(config_table, map_settings)
 end
 
@@ -102,7 +102,7 @@ local function change_map_settings(player)
       map_settings.enemy_evolution[k] = v
     end
   end
-  game.forces["enemy"].evolution_factor = enemy_evolution.evolution_factor
+  game.forces["enemy"].set_evolution_factor(enemy_evolution.evolution_factor, player.surface)
 
   player.print({"msg.change-map-settings-applied"})
 
