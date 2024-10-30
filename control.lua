@@ -98,7 +98,9 @@ local function change_map_settings(player)
     map_settings.enemy_expansion[k] = v
   end
   for k, v in pairs(enemy_evolution) do
-    map_settings.enemy_evolution[k] = v
+    if k ~= "evolution_factor" then
+      map_settings.enemy_evolution[k] = v
+    end
   end
   game.forces["enemy"].evolution_factor = enemy_evolution.evolution_factor
 
