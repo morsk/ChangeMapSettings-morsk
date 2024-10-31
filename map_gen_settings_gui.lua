@@ -322,7 +322,7 @@ end
 local autoplace_name_locale =
 {
   ["aux"] = {"gui-map-generator.aux"},
-  ["cliffs"] = {"gui-map-generator.cliffs"},
+  ["cliffs"] = {"autoplace-control-names.nauvis_cliff"},
   ["moisture"] = {"gui-map-generator.moisture"},
   ["water"] = {"", {"gui-map-generator.water"}, "/", {"gui-map-generator.island-size"}}
 }
