@@ -31,15 +31,20 @@ data.raw["gui-style"]["default"]["frame_in_deep_frame"] =
   }
 }
 
+-- 2.0 removed 'b_inner_frame' so this now defines its 'base' properties
+-- instead of inheriting from 'b_inner_frame'.
+-- It always changed the shadow.
 data.raw["gui-style"]["default"]["b_inner_frame_no_border"] =
 {
   type = "frame_style",
-  parent = "b_inner_frame",
   graphical_set =
   {
     base =
     {
+      position = {17, 0},
+      corner_size = 8,
       center = {position = {76, 8}, size = {1, 1}},
+      draw_type = "outer"
     },
     -- we only show shadow on the top, to solve the problem of it not being casted from the subheader panel above
     shadow =
