@@ -60,7 +60,7 @@ gui.make_map_settings = function(parent, surface)
   local inner_frame = parent.add{
     type = "frame",
     direction = "vertical",
-    style = "window_content_frame_packed"
+    style = "inside_shallow_frame_packed"
   }
 
   -- tool buttons
