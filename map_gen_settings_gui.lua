@@ -175,9 +175,6 @@ map_gen_gui.create_controls_with_scale_table = function(parent)
   }
   table.children[1].style.horizontally_stretchable = true
 
-  -- water
-  map_gen_gui.make_autoplace_options("water", table, false)
-
   -- trees and custom mod stuff
   for _, control in pairs(prototypes.autoplace_control) do
     if control.category == "terrain" and control.name ~= "planet-size" then -- planet size is a space exploration thing, we don't want the player to change it
@@ -362,9 +359,6 @@ map_gen_gui.reset_to_defaults = function(parent)
   map_gen_gui.create_expression_selectors(expression_selectors_flow)
 
 
-  -- water stuff
-  controls_with_scale_table[ENTIRE_PREFIX .. "water-freq"].text = "1"
-  controls_with_scale_table[ENTIRE_PREFIX .. "water-size"].text = "1"
   -- starting area
   enemies_table[ENTIRE_PREFIX .. "starting-area-size"].text = "1"
 
@@ -435,9 +429,6 @@ map_gen_gui.set_to_current = function(parent, map_gen_settings)
     end
   end
 
-  -- water stuff
-  controls_with_scale_table[ENTIRE_PREFIX .. "water-freq"].text = util.number_to_string(1 / (util.map_gen_size_to_number(map_gen_settings.terrain_segmentation) or 1)) -- inverse
-  controls_with_scale_table[ENTIRE_PREFIX .. "water-size"].text = util.number_to_string(util.map_gen_size_to_number(map_gen_settings.water) or 1)
   -- starting area
   enemies_table[ENTIRE_PREFIX .. "starting-area-size"].text = util.number_to_string(util.map_gen_size_to_number(map_gen_settings.starting_area) or 1)
 
@@ -523,9 +514,6 @@ map_gen_gui.read = function(parent, current_map_gen_settings)
     end
   end
 
-  -- water stuff
-  map_gen_settings.terrain_segmentation = 1 / util.textfield_to_number_with_error(controls_with_scale_table[ENTIRE_PREFIX .. "water-freq"]) -- inverse
-  map_gen_settings.water = util.textfield_to_number_with_error(controls_with_scale_table[ENTIRE_PREFIX .. "water-size"])
   -- starting area
   map_gen_settings.starting_area = util.textfield_to_number_with_error(enemies_table[ENTIRE_PREFIX .. "starting-area-size"])
 
