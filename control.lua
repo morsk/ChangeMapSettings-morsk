@@ -35,7 +35,7 @@ local function set_to_current_map_gen_settings(player)
   gui.get_preset_dropdown(player).selected_index = 0
 
   --the rest
-  map_gen_gui.set_to_current(gui.get_map_gen_settings_container(player), map_gen_settings)
+  map_gen_gui.set_to_current(gui.get_map_gen_settings_container(player), map_gen_settings, true)
 end
 
 local function set_to_current_map_settings(player)
