@@ -540,7 +540,7 @@ map_gen_gui.read = function(parent, current_map_gen_settings)
   end
 
   -- but space explorations planet size still needs to be set!
-  if current_map_gen_settings.autoplace_controls["planet-size"] then
+  if current_map_gen_settings.autoplace_controls and current_map_gen_settings.autoplace_controls["planet-size"] then
     autoplace_controls_mine["planet-size"] = current_map_gen_settings.autoplace_controls["planet-size"]
   end
 
