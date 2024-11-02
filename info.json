@@ -1,16 +1,8 @@
 {
-  "name": "ChangeMapSettings",
-  "version": "6.0.0",
+  "name": "EditMapSettings",
+  "version": "0.1.0",
   "factorio_version" : "2.0",
-  "title": "Change Map Settings",
-  "author": "Bilka",
-  "description": "Allows you to change your map and map generation settings at any time you want.",
-  "package":
-  { 
-    "scripts":
-    {
-      "prepackage": "./scripts/extract_changes.sh",
-      "postpublish": "./scripts/github_release.sh"
-    }
-  }
+  "title": "Edit Map Settings",
+  "author": "Morsk",
+  "description": "Allows you to change your map and map generation settings at any time you want.\nFork of Bilka's \"Change Map Settings\"."
 }

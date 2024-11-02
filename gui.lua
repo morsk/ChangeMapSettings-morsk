@@ -1,7 +1,7 @@
-local util = require("__ChangeMapSettings__/utilities")
+local util = require("__EditMapSettings__/utilities")
 local mod_gui = require("__core__/lualib/mod-gui")
-local map_gen_gui = require("__ChangeMapSettings__/map_gen_settings_gui")
-local map_settings_gui = require("__ChangeMapSettings__/map_settings_gui")
+local map_gen_gui = require("__EditMapSettings__/map_gen_settings_gui")
+local map_settings_gui = require("__EditMapSettings__/map_settings_gui")
 local gui = {}
 
 -- GUI --
@@ -11,17 +11,17 @@ gui.regen = function(player)
   local button_flow = mod_gui.get_button_flow(player)
   local button = button_flow.add{
     type = "button",
-    name = "change-map-settings-toggle-config",
+    name = "edit-map-settings-toggle-config",
     style = mod_gui.button_style,
-    tooltip = {"gui.change-map-settings-toggle-tooltip", {"gui.change-map-settings-title"}},
-    caption = {"gui.change-map-settings-toggle-config-caption"}
+    tooltip = {"gui.edit-map-settings-toggle-tooltip", {"gui.edit-map-settings-title"}},
+    caption = {"gui.edit-map-settings-toggle-config-caption"}
   }
   button.visible = true
 
   -- general gui frame setup --
   local main_flow = player.gui.screen.add{
     type = "frame",
-    name = "change-map-settings-main-flow",
+    name = "edit-map-settings-main-flow",
     direction = "horizontal",
     style = "invisible_frame"
   }
@@ -31,8 +31,8 @@ gui.regen = function(player)
   -- map settings
   local map_settings_frame = main_flow.add{
     type = "frame",
-    caption = {"gui.change-map-settings-title"},
-    name = "change-map-settings-map-settings-frame",
+    caption = {"gui.edit-map-settings-title"},
+    name = "edit-map-settings-map-settings-frame",
     direction = "vertical"
   }
   map_settings_frame.drag_target = main_flow
@@ -45,8 +45,8 @@ gui.regen = function(player)
   -- map gen settings
   local map_gen_frame = main_flow.add{
     type = "frame",
-    caption = {"gui.change-map-settings-map-gen-title"},
-    name = "change-map-settings-map-gen-frame",
+    caption = {"gui.edit-map-settings-map-gen-title"},
+    name = "edit-map-settings-map-gen-frame",
     direction = "vertical"
   }
   map_gen_frame.drag_target = main_flow
@@ -77,23 +77,23 @@ gui.make_map_settings = function(parent, surface)
     }
     frame.add{
       type = "sprite-button",
-      name = "change-map-settings-use-current-button",
+      name = "edit-map-settings-use-current-button",
       style = "tool_button",
       sprite = "utility/refresh",
-      tooltip = {"gui.change-map-settings-use-current-button-caption"}
+      tooltip = {"gui.edit-map-settings-use-current-button-caption"}
     }
     frame.add{
       type = "sprite-button",
-      name = "change-map-settings-default-button",
+      name = "edit-map-settings-default-button",
       style = "tool_button_red",
       sprite = "utility/reset",
-      tooltip = {"gui.change-map-settings-default-button-caption"}
+      tooltip = {"gui.edit-map-settings-default-button-caption"}
     }
   end
 
   local table_holder = inner_frame.add{
     type = "frame",
-    name = "change-map-settings-map-settings-table-holder",
+    name = "edit-map-settings-map-settings-table-holder",
     style = "b_inner_frame_no_border"
   }
 
@@ -115,17 +115,17 @@ end
 gui.make_general_map_settings = function(parent, surface)
   local config_more_option_general_flow = parent.add{
     type = "flow",
-    name = "change-map-settings-config-more-general-flow",
+    name = "edit-map-settings-config-more-general-flow",
     direction = "vertical"
   }
   config_more_option_general_flow.add{
     type = "label",
-    caption = {"gui.change-map-settings-general-title"},
+    caption = {"gui.edit-map-settings-general-title"},
     style = "caption_label"
   }
   local config_more_option_general_table = config_more_option_general_flow.add{
     type = "table",
-    name = "change-map-settings-config-more-general-table",
+    name = "edit-map-settings-config-more-general-table",
     column_count = 2,
     style = "bordered_table"
   }
@@ -138,18 +138,18 @@ gui.make_general_map_settings = function(parent, surface)
   }
   config_more_option_general_table.add{
     type = "checkbox",
-    name = "change-map-settings-peaceful-checkbox",
+    name = "edit-map-settings-peaceful-checkbox",
     state = surface.peaceful_mode,
   }
   config_more_option_general_table.children[1].style.horizontally_stretchable = true
 end
 
 gui.get_map_settings_container = function(player)
-  return player.gui.screen["change-map-settings-main-flow"]["change-map-settings-map-settings-frame"].children[1]["change-map-settings-map-settings-table-holder"].children[1]
+  return player.gui.screen["edit-map-settings-main-flow"]["edit-map-settings-map-settings-frame"].children[1]["edit-map-settings-map-settings-table-holder"].children[1]
 end
 
 gui.get_peaceful_mode_checkbox = function(player)
-  return gui.get_map_settings_container(player)["change-map-settings-config-more-general-flow"]["change-map-settings-config-more-general-table"]["change-map-settings-peaceful-checkbox"]
+  return gui.get_map_settings_container(player)["edit-map-settings-config-more-general-flow"]["edit-map-settings-config-more-general-table"]["edit-map-settings-peaceful-checkbox"]
 end
 
 gui.make_start_button = function(parent, map_gen)
@@ -165,9 +165,9 @@ gui.make_start_button = function(parent, map_gen)
   }
   start_button_flow.add{
     type = "button",
-    name = "change-map-settings-start-" .. (map_gen and "map-gen-" or "") .. "button",
-    tooltip = {"gui.change-map-settings-start-"  .. (map_gen and "map-gen-" or "") .. "button-tooltip"},
-    caption = {"gui.change-map-settings-start-button-caption", {"gui.change-map-settings-"  .. (map_gen and "map-gen-" or "") .. "title"}},
+    name = "edit-map-settings-start-" .. (map_gen and "map-gen-" or "") .. "button",
+    tooltip = {"gui.edit-map-settings-start-"  .. (map_gen and "map-gen-" or "") .. "button-tooltip"},
+    caption = {"gui.edit-map-settings-start-button-caption", {"gui.edit-map-settings-"  .. (map_gen and "map-gen-" or "") .. "title"}},
     style = "confirm_button"
   }
 end
@@ -182,7 +182,7 @@ gui.make_map_gen_settings = function(parent)
   do -- subheader
     local tool_button_frame = inner_frame.add{
       type = "frame",
-      name = "change-map-settings-map-gen-button-frame",
+      name = "edit-map-settings-map-gen-button-frame",
       direction = "horizontal",
       style = "subheader_frame"
     }
@@ -201,7 +201,7 @@ gui.make_map_gen_settings = function(parent)
     end
     tool_button_frame.add{
       type = "drop-down",
-      name = "change-map-settings-preset-dropdown",
+      name = "edit-map-settings-preset-dropdown",
       items = presets
     }
     tool_button_frame.add{
@@ -212,14 +212,14 @@ gui.make_map_gen_settings = function(parent)
     -- seed
     local seed_label = tool_button_frame.add{
       type = "label",
-      caption = {"gui.change-map-settings-seed-caption"},
+      caption = {"gui.edit-map-settings-seed-caption"},
       style = "caption_label"
     }
     seed_label.style.top_padding = 4
     seed_label.style.left_padding = 8
     tool_button_frame.add{
       type = "textfield",
-      name = "change-map-settings-seed-textfield",
+      name = "edit-map-settings-seed-textfield",
       text = "0",
       numeric = true,
       allow_decimal = false,
@@ -238,61 +238,61 @@ gui.make_map_gen_settings = function(parent)
     }
     tool_button_frame.add{
       type = "sprite-button",
-      name = "change-map-settings-use-current-map-gen-button",
+      name = "edit-map-settings-use-current-map-gen-button",
       style = "tool_button",
       sprite = "utility/refresh",
-      tooltip = {"gui.change-map-settings-use-current-button-caption"}
+      tooltip = {"gui.edit-map-settings-use-current-button-caption"}
     }
     tool_button_frame.add{
       type = "sprite-button",
-      name = "change-map-settings-default-map-gen-button",
+      name = "edit-map-settings-default-map-gen-button",
       style = "tool_button_red",
       sprite = "utility/reset",
-      tooltip = {"gui.change-map-settings-default-button-caption"}
+      tooltip = {"gui.edit-map-settings-default-button-caption"}
     }
   end
 
   -- rest of map gen settings
   local map_gen_flow = inner_frame.add{
     type = "flow",
-    name = "change-map-settings-map-gen-flow",
+    name = "edit-map-settings-map-gen-flow",
     direction = "horizontal"
   }
   map_gen_gui.create(map_gen_flow)
 end
 
 gui.get_map_gen_settings_container = function(player)
-  return player.gui.screen["change-map-settings-main-flow"]["change-map-settings-map-gen-frame"].children[1]["change-map-settings-map-gen-flow"]
+  return player.gui.screen["edit-map-settings-main-flow"]["edit-map-settings-map-gen-frame"].children[1]["edit-map-settings-map-gen-flow"]
 end
 
 gui.get_seed_field = function(player)
-  local tool_button_frame = player.gui.screen["change-map-settings-main-flow"]["change-map-settings-map-gen-frame"].children[1]["change-map-settings-map-gen-button-frame"]
-  return tool_button_frame["change-map-settings-seed-textfield"]
+  local tool_button_frame = player.gui.screen["edit-map-settings-main-flow"]["edit-map-settings-map-gen-frame"].children[1]["edit-map-settings-map-gen-button-frame"]
+  return tool_button_frame["edit-map-settings-seed-textfield"]
 end
 
 gui.get_preset_dropdown = function(player)
-  local tool_button_frame = player.gui.screen["change-map-settings-main-flow"]["change-map-settings-map-gen-frame"].children[1]["change-map-settings-map-gen-button-frame"]
-  return tool_button_frame["change-map-settings-preset-dropdown"]
+  local tool_button_frame = player.gui.screen["edit-map-settings-main-flow"]["edit-map-settings-map-gen-frame"].children[1]["edit-map-settings-map-gen-button-frame"]
+  return tool_button_frame["edit-map-settings-preset-dropdown"]
 end
 
 gui.kill = function(player)
   local button_flow = mod_gui.get_button_flow(player)
-  if button_flow["change-map-settings-toggle-config"] then
-    button_flow["change-map-settings-toggle-config"].destroy()
+  if button_flow["edit-map-settings-toggle-config"] then
+    button_flow["edit-map-settings-toggle-config"].destroy()
   end
-  if player.gui.screen["change-map-settings-main-flow"] then
-    player.gui.screen["change-map-settings-main-flow"].destroy()
+  if player.gui.screen["edit-map-settings-main-flow"] then
+    player.gui.screen["edit-map-settings-main-flow"].destroy()
   end
 
   --migration from pre 5.0.0
   local frame_flow = mod_gui.get_frame_flow(player)
-  if frame_flow["change-map-settings-main-flow"] then
-    frame_flow["change-map-settings-main-flow"].destroy()
+  if frame_flow["edit-map-settings-main-flow"] then
+    frame_flow["edit-map-settings-main-flow"].destroy()
   end
 
   --migration from 2.0.0
-  if frame_flow["change-map-settings-config-more-frame"] then
-		frame_flow["change-map-settings-config-more-frame"].destroy()
+  if frame_flow["edit-map-settings-config-more-frame"] then
+		frame_flow["edit-map-settings-config-more-frame"].destroy()
 	end
 end
 
