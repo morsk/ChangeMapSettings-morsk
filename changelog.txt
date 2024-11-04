@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
-Date: 01. 12. 2024
+Date: 01. 11. 2024
   Major Features:
     - Initial release, based on Bilka's Change Map Settings.
   Features:
     - Checkboxes to skip resources on a surface.
+  Minor Features:
+    - Current Evolution (not its "factor" settings) can be set separately per surface in 2.0.
