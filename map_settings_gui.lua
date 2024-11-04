@@ -164,6 +164,14 @@ map_settings_gui.pollution_reset_to_defaults = function(parent)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "diffusion-textfield"].text = "2"
 end
 
+map_settings_gui.general_reset_to_defaults = function(parent)
+  local WIDGET_PREFIX = "config-more-general-"
+  -- "General" is inconsistant only uses the MOD_PREFIX not ENTIRE_PREFIX. Refactor someday.
+  local table = parent[MOD_PREFIX .. WIDGET_PREFIX .. "flow"][MOD_PREFIX .. WIDGET_PREFIX .. "table"]
+  table[MOD_PREFIX .. WIDGET_PREFIX .. "asteroids-spawning-rate-textfield"].text = "1"
+  table[MOD_PREFIX .. WIDGET_PREFIX .. "spoiling-rate-textfield"].text = "1"
+end
+
 map_settings_gui.expansion_set_to_current = function(parent, map_settings)
   local WIDGET_PREFIX = "expansion-"
   local table = parent[ENTIRE_PREFIX .. WIDGET_PREFIX .. "flow"][ENTIRE_PREFIX .. WIDGET_PREFIX .. "table"]
@@ -194,6 +202,14 @@ map_settings_gui.pollution_set_to_current = function(parent, map_settings)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "tree-dmg-textfield"].text = tostring(map_settings.pollution.min_pollution_to_damage_trees)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "tree-absorb-textfield"].text = tostring(map_settings.pollution.pollution_restored_per_tree_damage)
   table[ENTIRE_PREFIX .. WIDGET_PREFIX .. "diffusion-textfield"].text = tostring(map_settings.pollution.diffusion_ratio * 100)
+end
+
+map_settings_gui.general_set_to_current = function(parent)
+  local WIDGET_PREFIX = "config-more-general-"
+  -- "General" is inconsistant only uses the MOD_PREFIX not ENTIRE_PREFIX. Refactor someday.
+  local table = parent[MOD_PREFIX .. WIDGET_PREFIX .. "flow"][MOD_PREFIX .. WIDGET_PREFIX .. "table"]
+  table[MOD_PREFIX .. WIDGET_PREFIX .. "asteroids-spawning-rate-textfield"].text = tostring(game.map_settings.asteroids.spawning_rate)
+  table[MOD_PREFIX .. WIDGET_PREFIX .. "spoiling-rate-textfield"].text = tostring(1 / game.difficulty_settings.spoil_time_modifier) -- inverse
 end
 
 -- can throw!
@@ -266,6 +282,22 @@ map_settings_gui.pollution_read = function(parent)
                                                 0, 25,
                                                 {"msg." .. MOD_PREFIX .. "invalid-pollution-diffusion"}) / 100
   return pollution
+end
+
+-- can throw!
+map_settings_gui.general_read = function(parent)
+  local WIDGET_PREFIX = "config-more-general-"
+  -- "General" is inconsistant only uses the MOD_PREFIX not ENTIRE_PREFIX. Refactor someday.
+  local table = parent[MOD_PREFIX .. WIDGET_PREFIX .. "flow"][MOD_PREFIX .. WIDGET_PREFIX .. "table"]
+  local general = {}
+
+  general.asteroids_spawning_rate = util.check_bounds(util.textfield_to_number_with_error(table[MOD_PREFIX .. WIDGET_PREFIX .. "asteroids-spawning-rate-textfield"]),
+                                                      0.1, 4.0,
+                                                      {"msg." .. MOD_PREFIX .. "invalid-asteroids-spawning-rate"})
+  general.spoiling_rate = 1 / util.check_bounds(util.textfield_to_number_with_error(table[MOD_PREFIX .. WIDGET_PREFIX .. "spoiling-rate-textfield"]),
+                                                0.1, 10.0,
+                                                {"msg." .. MOD_PREFIX .. "invalid-spoiling-rate"}) -- inverse
+  return general
 end
 
 return map_settings_gui

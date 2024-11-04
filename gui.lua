@@ -131,6 +131,7 @@ gui.make_general_map_settings = function(parent, surface)
   }
   config_more_option_general_table.style.column_alignments[2] = "center"
 
+  -- no-enemies-mode
   config_more_option_general_table.add{
     type = "label",
     caption = util.add_info_icon_to_string({"gui-map-generator.no-enemies-mode-checkbox"}),
@@ -142,6 +143,7 @@ gui.make_general_map_settings = function(parent, surface)
     state = surface.no_enemies_mode,
   }
 
+  -- peaceful-mode
   config_more_option_general_table.add{
     type = "label",
     caption = util.add_info_icon_to_string({"gui-map-generator.peaceful-mode-checkbox"}),
@@ -152,6 +154,33 @@ gui.make_general_map_settings = function(parent, surface)
     name = "edit-map-settings-peaceful-checkbox",
     state = surface.peaceful_mode,
   }
+
+  -- asteroids-spawning-rate
+  -- would be better to create with map_settings_gui.make_config_option, after refactor
+  config_more_option_general_table.add{
+    type = "label",
+    caption = util.add_info_icon_to_string({"gui-map-generator.asteroids"}),
+    tooltip = {"gui-map-generator.asteroids-spawning-rate-description"}
+  }
+  config_more_option_general_table.add{
+    type = "textfield",
+    name = "edit-map-settings-config-more-general-asteroids-spawning-rate-textfield",
+    state = game.map_settings.asteroids.spawning_rate,
+  }.style.maximal_width = 40
+
+  -- spoiling-rate
+  -- would be better to create with map_settings_gui.make_config_option, after refactor
+  config_more_option_general_table.add{
+    type = "label",
+    caption = util.add_info_icon_to_string({"gui-map-generator.spoiling-rate"}),
+    tooltip = {"gui-map-generator.spoiling-rate-description"}
+  }
+  config_more_option_general_table.add{
+    type = "textfield",
+    name = "edit-map-settings-config-more-general-spoiling-rate-textfield",
+    state = game.difficulty_settings.spoil_time_modifier,
+  }.style.maximal_width = 40
+
   config_more_option_general_table.children[1].style.horizontally_stretchable = true
 end
 

@@ -24,6 +24,7 @@ local function reset_to_default_map_settings(player)
   map_settings_gui.expansion_reset_to_defaults(config_table)
   map_settings_gui.evolution_reset_to_defaults(config_table)
   map_settings_gui.pollution_reset_to_defaults(config_table)
+  map_settings_gui.general_reset_to_defaults(config_table)
 end
 
 local function set_to_current_map_gen_settings(player)
@@ -50,6 +51,7 @@ local function set_to_current_map_settings(player)
   map_settings_gui.expansion_set_to_current(config_table, map_settings)
   map_settings_gui.evolution_set_to_current(config_table, map_settings, player.surface)
   map_settings_gui.pollution_set_to_current(config_table, map_settings)
+  map_settings_gui.general_set_to_current(config_table)
 end
 
 local function set_to_current_all(player)
@@ -79,6 +81,12 @@ local function edit_map_settings(player)
   local status3, pollution = pcall(map_settings_gui.pollution_read, config_table)
   if not status3 then
     player.print(pollution)
+    player.print({"msg.edit-map-settings-apply-failed"})
+    return
+  end
+  local status4, general = pcall(map_settings_gui.general_read, config_table)
+  if not status4 then
+    player.print(general)
     player.print({"msg.edit-map-settings-apply-failed"})
     return
   end
@@ -116,6 +124,8 @@ local function edit_map_settings(player)
     end
   end
   game.forces["enemy"].set_evolution_factor(enemy_evolution.evolution_factor, player.surface)
+  game.map_settings.asteroids.spawning_rate = general.asteroids_spawning_rate
+  game.difficulty_settings.spoil_time_modifier = general.spoiling_rate
 
   player.print({"msg.edit-map-settings-applied"})
 
