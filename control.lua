@@ -15,7 +15,8 @@ local function reset_to_default_map_gen_settings(player)
 end
 
 local function reset_to_default_map_settings(player)
-  -- peaceful mode
+  -- no-enemies & peaceful modes
+  gui.get_no_enemies_checkbox(player).state = false
   gui.get_peaceful_mode_checkbox(player).state = false
 
   -- MAP SETTINGS --
@@ -39,7 +40,8 @@ local function set_to_current_map_gen_settings(player)
 end
 
 local function set_to_current_map_settings(player)
-  -- peaceful mode
+  -- no-enemies & peaceful modes
+  gui.get_no_enemies_checkbox(player).state = player.surface.no_enemies_mode
   gui.get_peaceful_mode_checkbox(player).state = player.surface.peaceful_mode
 
   -- MAP SETTINGS --
@@ -59,6 +61,7 @@ local function edit_map_settings(player)
   local config_table = gui.get_map_settings_container(player)
 
   -- Reading everything out
+  local no_enemies_mode = gui.get_no_enemies_checkbox(player).state
   local peaceful_mode = gui.get_peaceful_mode_checkbox(player).state
 
   local status, enemy_expansion = pcall(map_settings_gui.expansion_read, config_table)
@@ -82,6 +85,16 @@ local function edit_map_settings(player)
 
   -- And now to apply it all
   for _, surface in pairs(game.surfaces) do
+    if no_enemies_mode and not surface.no_enemies_mode then
+      -- Purge enemy units when activating no-enemies mode.
+      for _, entity in pairs(surface.find_entities_filtered({force = "enemy"})) do
+        -- Check .valid because destroying spiders will invalidate references to legs, etc.
+        if entity.valid and entity.type ~= "unit-spawner" then
+          entity.destroy()
+        end
+      end
+    end
+    surface.no_enemies_mode = no_enemies_mode
     surface.peaceful_mode = peaceful_mode
   end
 
@@ -123,6 +136,7 @@ local function edit_map_gen_settings(player)
   end
 
   -- fill out missing fields with the current settings
+  settings.no_enemies_mode = player.surface.no_enemies_mode
   settings.peaceful_mode = player.surface.peaceful_mode
   settings.starting_points = player.surface.map_gen_settings.starting_points
   settings.width = player.surface.map_gen_settings.width

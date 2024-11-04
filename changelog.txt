@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2024-11-04
+  Minor Features:
+    - "No enemies" mode can be toggled like Peaceful mode. Toggling it off tries to clear enemies, but may not clear Vulcanus Demolishers with partially-generated territory. (Wait until it's fully generated, then kill or toggle again.)
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
-Date: 01. 11. 2024
+Date: 2024-11-02
   Major Features:
     - Initial release, based on Bilka's Change Map Settings.
   Features:

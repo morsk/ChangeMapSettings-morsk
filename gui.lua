@@ -133,6 +133,17 @@ gui.make_general_map_settings = function(parent, surface)
 
   config_more_option_general_table.add{
     type = "label",
+    caption = util.add_info_icon_to_string({"gui-map-generator.no-enemies-mode-checkbox"}),
+    tooltip = {"gui-map-generator.no-enemies-mode-description"}
+  }
+  config_more_option_general_table.add{
+    type = "checkbox",
+    name = "edit-map-settings-no-enemies-checkbox",
+    state = surface.no_enemies_mode,
+  }
+
+  config_more_option_general_table.add{
+    type = "label",
     caption = util.add_info_icon_to_string({"gui-map-generator.peaceful-mode-checkbox"}),
     tooltip = {"gui-map-generator.peaceful-mode-description"}
   }
@@ -146,6 +157,10 @@ end
 
 gui.get_map_settings_container = function(player)
   return player.gui.screen["edit-map-settings-main-flow"]["edit-map-settings-map-settings-frame"].children[1]["edit-map-settings-map-settings-table-holder"].children[1]
+end
+
+gui.get_no_enemies_checkbox = function(player)
+  return gui.get_map_settings_container(player)["edit-map-settings-config-more-general-flow"]["edit-map-settings-config-more-general-table"]["edit-map-settings-no-enemies-checkbox"]
 end
 
 gui.get_peaceful_mode_checkbox = function(player)
