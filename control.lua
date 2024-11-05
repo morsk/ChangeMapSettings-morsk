@@ -138,7 +138,7 @@ end
 
 local function edit_map_gen_settings(player)
   --all the stuff
-  local status, settings = pcall(map_gen_gui.read, gui.get_map_gen_settings_container(player), player.surface.map_gen_settings)
+  local status, settings = pcall(map_gen_gui.read, gui.get_map_gen_settings_container(player), player.surface.planet, player.surface.map_gen_settings)
   if not status then
     player.print(settings)
     player.print({"msg.edit-map-settings-apply-failed"})

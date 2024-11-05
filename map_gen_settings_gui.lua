@@ -1,3 +1,4 @@
+local factorio_util = require("util")
 local util = require("__EditMapSettings__/utilities")
 local MOD_PREFIX = "edit-map-settings-"
 local GUI_PREFIX = "map-gen-"
@@ -528,8 +529,20 @@ map_gen_gui.set_to_current = function(parent, map_gen_settings, reset_checkboxes
 
   -- cliffs
   if cliff_settings then -- can be missing when reading from preset
-    cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"].text = util.number_to_string(40 / (cliff_settings.cliff_elevation_interval or 40)) -- inverse with 40
-    cliffs_table[ENTIRE_PREFIX .. "cliffs-size"].text = util.number_to_string(util.map_gen_size_to_number(cliff_settings.richness) or 1)
+    local cliff_control = cliff_settings.control
+    if cliff_control and #cliff_control > 0 then
+      -- cliff_control is something like "nauvis_cliff"
+      -- cliff_autoplace is autoplace_controls["nauvis_cliff"]
+      local cliff_autoplace = cliff_control and autoplace_controls and autoplace_controls[cliff_control]
+      if cliff_autoplace then
+        cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"].text = util.number_to_string(cliff_autoplace.frequency)
+        cliffs_table[ENTIRE_PREFIX .. "cliffs-size"].text = util.number_to_string(cliff_autoplace.size)
+      end
+    else
+      -- without a .control, we do it the old way, changing cliff_settings without an autoplace
+      cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"].text = util.number_to_string(40 / (cliff_settings.cliff_elevation_interval or 40)) -- inverse with 40
+      cliffs_table[ENTIRE_PREFIX .. "cliffs-size"].text = util.number_to_string(util.map_gen_size_to_number(cliff_settings.richness) or 1)
+    end
   end
 end
 
@@ -549,7 +562,7 @@ end
 
 -- returns map_gen_settings, can throw!
 -- param current_map_gen_settings only used for space exploration "planet-size" !!!
-map_gen_gui.read = function(parent, current_map_gen_settings)
+map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   local expression_selectors_flow = parent[ENTIRE_PREFIX .. "gui-frame-2"][ENTIRE_PREFIX .. "expression-selectors-table"][ENTIRE_PREFIX .. "expression-selectors-flow"]
   local resource_table = parent[ENTIRE_PREFIX .. "gui-frame-1"][ENTIRE_PREFIX .. "resource-scroll-pane"][ENTIRE_PREFIX .."resource-table"]
   local controls_with_scale_table = parent[ENTIRE_PREFIX .. "gui-frame-2"][ENTIRE_PREFIX .. "terrain-scroll-pane"][ENTIRE_PREFIX .."controls-with-scale-table"]
@@ -628,9 +641,31 @@ map_gen_gui.read = function(parent, current_map_gen_settings)
   property_expression_names_mine["control-setting:aux:bias"] = util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "aux-size"])
 
   -- cliffs
-  cliff_settings_mine.name = "cliff"
-  cliff_settings_mine.cliff_elevation_interval = 40 / util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"]) -- inverse with 40
-  cliff_settings_mine.richness = util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-size"])
+  if planet then
+    -- Default to planet's cliff_settings if we have one.
+    -- Or else we'll zero out important things!
+    -- Should refactor not to have to pass the planet as an argument, but whatever.
+    -- First there needs to be a data model somewhere, not just GUI boxes.
+    -- Or an algorithm to modify map_gen_data piece-by-piece, not overwrite from scratch.
+    -- (Or there's something I'm not using and can find.)
+    cliff_settings_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.cliff_settings)
+  else
+    cliff_settings_mine.name = "cliff"
+  end
+  -- In 2.0, cliffs are configured with their autoplace_control.
+  -- map_gen_settings.cliff_settings still exists but isn't what the game's sliders change.
+  local cliff_autoplace_name = cliff_settings_mine.control
+  if cliff_autoplace_name and #cliff_autoplace_name > 0 then
+    autoplace_controls_mine[cliff_autoplace_name] = autoplace_controls_mine[cliff_autoplace_name] or {frequency = 1, richness = 1, size = 1}
+    autoplace_controls_mine[cliff_autoplace_name].frequency = util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"])
+    autoplace_controls_mine[cliff_autoplace_name].size = util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-size"])
+  else
+    -- Trying to set cliff settings on a surface where .control is "".
+    -- Let them do it the 1.1 way, directly changing cliff_settings.
+    -- This has an old bug where -freq can divide by 0. I haven't fixed it.
+    cliff_settings_mine.cliff_elevation_interval = 40 / util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-freq"]) -- inverse with 40
+    cliff_settings_mine.richness = util.textfield_to_number_with_error(cliffs_table[ENTIRE_PREFIX .. "cliffs-size"])
+  end
 
   map_gen_settings.autoplace_controls = autoplace_controls_mine
   map_gen_settings.property_expression_names = property_expression_names_mine
