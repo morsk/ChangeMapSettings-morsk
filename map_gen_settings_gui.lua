@@ -573,6 +573,7 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   local property_expression_names_mine = {}
   local autoplace_controls_mine = {}
   local cliff_settings_mine = {}
+  local territory_settings_mine = {}
 
   -- expression selectors
   local possible_properties = util.get_possible_noise_expression_properties()
@@ -634,11 +635,11 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
     autoplace_controls_mine["planet-size"] = current_map_gen_settings.autoplace_controls["planet-size"]
   end
 
-  -- moisture and terrain type
-  property_expression_names_mine["control-setting:moisture:frequency:multiplier"] = 1 / util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "moisture-freq"]) -- inverse
-  property_expression_names_mine["control-setting:moisture:bias"] = util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "moisture-size"])
-  property_expression_names_mine["control-setting:aux:frequency:multiplier"] = 1 / util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "aux-freq"]) -- inverse
-  property_expression_names_mine["control-setting:aux:bias"] = util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "aux-size"])
+  -- Moisture and terrain type aren't in these settings anymore. Just copy the planet.
+  if planet then
+    property_expression_names_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.property_expression_names)
+    territory_settings_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.territory_settings)
+  end
 
   -- cliffs
   if planet then
@@ -670,6 +671,7 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   map_gen_settings.autoplace_controls = autoplace_controls_mine
   map_gen_settings.property_expression_names = property_expression_names_mine
   map_gen_settings.cliff_settings = cliff_settings_mine
+  map_gen_settings.territory_settings = territory_settings_mine
   return map_gen_settings
 end
 
