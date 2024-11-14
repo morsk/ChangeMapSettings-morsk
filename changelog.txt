@@ -2,7 +2,7 @@
 Version: 0.1.4
 Date: 2024-11-08
   Bugfixes:
-    - Fix some Space Age planet settings being lost. If you edited any planet besides Nauvis, I recommend editing it again which will regenerate any hidden settings that weren't copied.
+    - Fix some Space Age planet settings being lost. If you edited any planet besides Nauvis, I recommend editing it again which will regenerate any hidden settings that weren't copied. You don't have to change anything; just open the interface and click "Apply Map generation settings" on the bottom-right.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
 Date: 2024-11-05
