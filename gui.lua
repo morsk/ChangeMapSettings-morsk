@@ -4,6 +4,16 @@ local map_gen_gui = require("__EditMapSettings__/map_gen_settings_gui")
 local map_settings_gui = require("__EditMapSettings__/map_settings_gui")
 local gui = {}
 
+local function nice_surface_name(surface)
+  if surface.planet and surface.planet.prototype.localised_name then
+    return surface.planet.prototype.localised_name
+  elseif surface.platform then
+    return surface.platform.name
+  else
+    return surface.name
+  end
+end
+
 -- GUI --
 gui.regen = function(player)
   gui.kill(player)
@@ -45,7 +55,7 @@ gui.regen = function(player)
   -- map gen settings
   local map_gen_frame = main_flow.add{
     type = "frame",
-    caption = {"gui.edit-map-settings-map-gen-title"},
+    caption = {"", nice_surface_name(player.surface), " - ", {"gui.edit-map-settings-map-gen-title"}},
     name = "edit-map-settings-map-gen-frame",
     direction = "vertical"
   }
