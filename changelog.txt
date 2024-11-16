@@ -2,7 +2,7 @@
 Version: 0.1.5
 Date: 2024-11-16
   Minor Features:
-    - Right panel now shows name of surface, to make it clearer tha panel edits one surface at a time.
+    - Right panel now shows name of surface, to make it clearer the panel edits one surface at a time.
   Bugfixes:
     - Fix inability to change planet elevation.
 ---------------------------------------------------------------------------------------------------
