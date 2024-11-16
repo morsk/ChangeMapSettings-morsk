@@ -575,6 +575,12 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   local cliff_settings_mine = {}
   local territory_settings_mine = {}
 
+  -- Moisture and terrain type aren't in these settings anymore. Just copy the planet.
+  if planet then
+    property_expression_names_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.property_expression_names)
+    territory_settings_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.territory_settings)
+  end
+
   -- expression selectors
   local possible_properties = util.get_possible_noise_expression_properties()
   for property in pairs(possible_properties) do
@@ -633,12 +639,6 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   -- but space explorations planet size still needs to be set!
   if current_map_gen_settings.autoplace_controls and current_map_gen_settings.autoplace_controls["planet-size"] then
     autoplace_controls_mine["planet-size"] = current_map_gen_settings.autoplace_controls["planet-size"]
-  end
-
-  -- Moisture and terrain type aren't in these settings anymore. Just copy the planet.
-  if planet then
-    property_expression_names_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.property_expression_names)
-    territory_settings_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.territory_settings)
   end
 
   -- cliffs
