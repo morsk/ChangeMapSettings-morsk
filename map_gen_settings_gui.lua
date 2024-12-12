@@ -521,10 +521,16 @@ map_gen_gui.set_to_current = function(parent, map_gen_settings, reset_checkboxes
 
   -- moisture and terrain type
   if property_expression_names then -- can be missing when reading from preset
-    climate_table[ENTIRE_PREFIX .. "moisture-freq"].text = util.number_to_string(1 / (property_expression_names["control-setting:moisture:frequency:multiplier"] or 1)) -- inverse
-    climate_table[ENTIRE_PREFIX .. "moisture-size"].text = util.number_to_string(property_expression_names["control-setting:moisture:bias"] or 0)
-    climate_table[ENTIRE_PREFIX .. "aux-freq"].text = util.number_to_string(1 / (property_expression_names["control-setting:aux:frequency:multiplier"] or 1)) -- inverse
-    climate_table[ENTIRE_PREFIX .. "aux-size"].text = util.number_to_string(property_expression_names["control-setting:aux:bias"] or 0)
+    -- All 4 values are stored as text. The "bias" we can use as-is, while defaulting to 0.
+    climate_table[ENTIRE_PREFIX .. "moisture-size"].text = property_expression_names["control:moisture:bias"] or util.number_to_string(0)
+    climate_table[ENTIRE_PREFIX .. "aux-size"].text = property_expression_names["control:aux:bias"] or util.number_to_string(0)
+    -- The "frequency" we have to invert, which means converting to and from a number.
+    local function invert_number_as_text(t)
+      local n = tonumber(t)
+      return util.number_to_string(1 / n)
+    end
+    climate_table[ENTIRE_PREFIX .. "moisture-freq"].text = invert_number_as_text(property_expression_names["control:moisture:frequency"] or util.number_to_string(1))
+    climate_table[ENTIRE_PREFIX .. "aux-freq"].text = invert_number_as_text(property_expression_names["control:aux:frequency"] or util.number_to_string(1))
   end
 
   -- cliffs
@@ -579,6 +585,19 @@ map_gen_gui.read = function(parent, planet, current_map_gen_settings)
   if planet then
     property_expression_names_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.property_expression_names)
     territory_settings_mine = factorio_util.table.deepcopy(planet.prototype.map_gen_settings.territory_settings)
+  end
+
+  -- Nauvis is the only planet that uses the moisture and terrain settings.
+  -- If someone tries the setting on a non-planet surface, let them try and see what happens.
+  if (not planet) or planet.name == "nauvis" then
+    local moisture_bias = util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "moisture-size"])
+    property_expression_names_mine["control:moisture:bias"] = util.number_to_string(moisture_bias)
+    local aux_bias = util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "aux-size"])
+    property_expression_names_mine["control:aux:bias"] = util.number_to_string(aux_bias)
+    local moisture_freq = 1 / util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "moisture-freq"]) -- inverse
+    property_expression_names_mine["control:moisture:frequency"] = util.number_to_string(moisture_freq)
+    local aux_freq = 1 / util.textfield_to_number_with_error(climate_table[ENTIRE_PREFIX .. "aux-freq"]) -- inverse
+    property_expression_names_mine["control:aux:frequency"] = util.number_to_string(aux_freq)
   end
 
   -- expression selectors
